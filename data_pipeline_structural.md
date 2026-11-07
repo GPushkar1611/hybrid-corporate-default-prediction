@@ -1,15 +1,22 @@
-# data pipeline 
-data.py: daily panel per firm (market cap E, debt D, rate r)
-        |
-build_panel.py builds two tables:
-   obs          one row per firm-month: firm, date, D, r, label y
-   daily_equity daily market cap for every firm
-        |
-merton.compute_structural_features(obs, daily_equity)   <-- the Merton model
-        |
-panel.csv = obs + structural features (dd, pd, ln_va, sigma_a, ...)
-        |
-ML / sequence / hybrid models
+# Data Pipeline 
+```
+build_panel.py
+  │
+  ├─ data.py                 builds a daily panel for each firm
+  │                          (market cap E, default point D, risk-free rate r)
+  │
+  ├─ builds two tables       (in memory only, not saved)
+  │     obs           one row per firm-month: firm, date, D, r, label y
+  │     daily_equity  daily market cap for every firm (dates x firms)
+  │
+  ├─ merton.py               compute_structural_features(obs, daily_equity)
+  │                          <-- the Merton model: DD, PD, ln V_A, sigma_A, D/V_A
+  │
+  └─ writes panel.csv        obs + structural features
+        │
+        ▼
+  ML / sequence / hybrid models
+```
 
 ### data.py:
 a point-in-time layer that takes debt and share counts from SEC filings only after their filing date, adjusts shares for stock splits, and uses prices that are not dividend-adjusted.
