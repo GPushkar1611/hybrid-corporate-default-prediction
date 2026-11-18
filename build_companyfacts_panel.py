@@ -338,13 +338,6 @@ def build_panel(
         positive_filings=("y", "sum"), sic2=("sic2", "first"), bankruptcy_date=("bankruptcy_date", "first"),
     )
     coverage.to_csv(out_dir / "firm_coverage.csv", index=False)
-    (out_dir / "README.md").write_text(
-        "# SEC EDGAR bankruptcy panel\n\n"
-        "Each row is a 10-K/10-Q filing snapshot. Numeric features use standard SEC CompanyFacts values from the same accession and exact reporting-period end date; `date` is the EDGAR filing date. SEC FSDS SUB provides filing metadata and filing-time SIC.\n\n"
-        f"Predictors: `{', '.join(FEATURE_COLUMNS)}`. The 12-month label uses the independently rebuilt SEC Item 1.03 event table. The mature label cutoff is {cutoff.date()}.\n\n"
-        "Ratios with denominators below 1,000,000 reporting-currency units are left missing. Negative liabilities/cash and current assets or cash exceeding 105% of total assets are omitted from affected ratios. No dataset-level winsorization is applied. See `dataset_manifest.json` for source hashes, feature mapping, counts, and limitations. Raw CompanyFacts values are SEC-normalized; custom and dimensional concepts are omitted.\n",
-        encoding="utf-8",
-    )
     print(json.dumps(manifest["counts"], indent=2), flush=True)
     print(f"Wrote {panel_path.resolve()}", flush=True)
     return manifest

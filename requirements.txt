@@ -1,12 +1,15 @@
+# Core (data pipeline, models, notebook)
+numpy>=1.24
 pandas>=2.0
-scikit-learn>=1.2
-joblib>=1.3
-requests>=2.31
-yfinance>=0.2.54
-pandas-datareader>=0.10
 scipy>=1.10
-matplotlib>=3.7
-# Optional: required only for XGBoostModel
+scikit-learn>=1.3
 xgboost>=2.0
-# Required for src/sequence_models LSTM support
 torch>=2.2
+matplotlib>=3.7
+requests>=2.31          # SEC downloads
+ipykernel>=6            # run implementation_notebook.ipynb
+
+# Optional
+numba>=0.58             # faster Merton solver (src/structural/merton.py)
+yfinance>=0.2.54        # market_structural_pipeline/ only
+pandas-datareader>=0.10 # market_structural_pipeline/ only (FRED risk-free rate)

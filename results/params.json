@@ -1,0 +1,11 @@
+{
+  "tabular": {
+    "logit": {
+      "C": 0.001
+    },
+    "random_forest": {},
+    "xgboost": {},
+    "xgboost_offset": {}
+  },
+  "lstm": {}
+}

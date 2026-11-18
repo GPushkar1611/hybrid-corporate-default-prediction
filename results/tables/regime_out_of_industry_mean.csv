@@ -1,0 +1,9 @@
+setting,model,auroc,ap_lift
+out-of-industry,Hybrid H1 (XGB),0.8472474808170314,14.875890429906654
+out-of-industry,Hybrid H2 (XGB + prior),0.8399316332290155,16.20068427760864
+out-of-industry,ML (XGB),0.8385451185106879,11.759002262961578
+out-of-industry,Structural,0.7742634257118869,5.875756357545459
+out-of-industry + out-of-time,Hybrid H1 (XGB),0.8668686073054329,20.44004155875133
+out-of-industry + out-of-time,Hybrid H2 (XGB + prior),0.8674010591518907,17.299211752460305
+out-of-industry + out-of-time,ML (XGB),0.8693173591940905,22.082723562148555
+out-of-industry + out-of-time,Structural,0.795704772187615,4.063080168052324

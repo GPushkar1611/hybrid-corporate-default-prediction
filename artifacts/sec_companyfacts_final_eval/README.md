@@ -1,5 +1,0 @@
-# SEC as-filed OOT evaluation
-
-Tree and filing-sequence LSTM models use the same point-in-time SEC filing panel, feature definitions, and purged temporal boundaries. Row counts differ because the LSTM requires eight prior filing observations. Use `matched_support_comparison.csv` to compare their predictions on the same LSTM-eligible test endpoints; the trees were trained on all eligible snapshots, while the LSTM training set also requires eight prior observations. The LSTM uses filing observations, not calendar months, and averages three seeded models. Preprocessing and outlier limits are fitted on training dates only.
-
-Metrics include filing-row results and firm-cluster bootstrap intervals to reflect within-company dependence. The test covers the mature label horizon only. Class weighting means predicted probabilities are not calibrated; rank by AP/AUROC until calibration is fit on validation. Before final claims, inspect a targeted sample of CompanyFacts tag mappings against original filings; custom and dimensional concepts are omitted.

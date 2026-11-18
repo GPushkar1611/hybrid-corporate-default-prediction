@@ -12,7 +12,7 @@ from pathlib import Path
 
 import pandas as pd
 
-from edgar_labels import _hits, build_bankruptcy_table
+from sec_labels import _hits, build_bankruptcy_table
 
 
 def sha256(path: Path) -> str:
@@ -117,7 +117,7 @@ def audit(submissions_path: Path, local_events_path: Path, out_dir: Path) -> dic
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--submissions", type=Path, default=Path("sec_bulk/submissions.zip"))
-    parser.add_argument("--events", type=Path, default=Path("bankruptcies.csv"))
+    parser.add_argument("--events", type=Path, default=Path("market_structural_pipeline/bankruptcies.csv"))
     parser.add_argument("--out-dir", type=Path, default=Path("artifacts/sec_event_validation"))
     args = parser.parse_args()
     args.out_dir.mkdir(parents=True, exist_ok=True)

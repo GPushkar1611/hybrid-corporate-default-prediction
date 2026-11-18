@@ -9,12 +9,10 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
+from build_companyfacts_panel import FEATURE_COLUMNS
 
-FEATURES = [
-    "log_assets_usd", "liabilities_to_assets", "current_ratio", "cash_to_assets",
-    "debt_to_assets", "equity_to_assets", "working_capital_to_assets",
-    "cash_to_current_liabilities", "debt_to_equity", "debt_partial",
-]
+
+FEATURES = list(FEATURE_COLUMNS)
 
 
 def validate(panel_path: Path, manifest_path: Path, event_audit_path: Path, out_path: Path) -> dict:

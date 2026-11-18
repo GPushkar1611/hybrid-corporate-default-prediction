@@ -1,8 +1,22 @@
+# environments / caches
 .venv/
 __pycache__/
+.ipynb_checkpoints/
+
+# raw SEC downloads (rebuild with download_sec_*.py)
 sec_bulk/
 sec_cache/
-*.zip
 company_tickers.json
-panel.csv
+*.zip
+
+# datasets (rebuild with build_companyfacts_panel.py / augment_companyfacts_panel.py)
+*panel.csv
+american_bankruptcy_dataset.csv
 merton_results.csv
+panel_build_failures.csv
+
+# large model outputs
+*predictions*.csv
+*.joblib
+*.pt
+*.pkl

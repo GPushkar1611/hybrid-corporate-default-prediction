@@ -1,0 +1,13 @@
+group,model,auroc,positives,rows
+small,structural_logit,0.7588636063219686,264,20438
+medium,structural_logit,0.7912732024842974,340,20438
+large,structural_logit,0.8489800856243084,91,20438
+small,xgb_static_ml,0.7698717183233144,264,20438
+medium,xgb_static_ml,0.8738912417390082,340,20438
+large,xgb_static_ml,0.9189053439311462,91,20438
+small,xgb_static_hybrid,0.763691677857188,264,20438
+medium,xgb_static_hybrid,0.8683134991482909,340,20438
+large,xgb_static_hybrid,0.9147780513583826,91,20438
+small,xgb_prior_ml,0.7828387348252026,264,20438
+medium,xgb_prior_ml,0.8763775148829559,340,20438
+large,xgb_prior_ml,0.9144075563695165,91,20438

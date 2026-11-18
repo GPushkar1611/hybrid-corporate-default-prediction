@@ -1,0 +1,186 @@
+{
+  "dataset": "SEC EDGAR bankruptcy panel v2 (v1 + flows, cover page, structural)",
+  "version": "2.0.0",
+  "generated_utc": "2026-11-18T11:32:52.315702+00:00",
+  "source_panel": "artifacts\\sec_companyfacts_bankruptcy_v1\\sec_bankruptcy_panel.csv",
+  "source_panel_sha256": "775dc6fd9eaafadf571b05fa99de562fce2aba14b868e7cdcb7ccabd4918f208",
+  "companyfacts_archive": "sec_bulk\\companyfacts.zip",
+  "companyfacts_archive_sha256": "6b40e5b4dd593f60076c3700457f37420f35a07175410b1a02eb9132d1606742",
+  "train_end_for_sector_priors": "2018-12-31",
+  "feature_groups": {
+    "accounting_base": [
+      "log_assets_usd",
+      "liabilities_to_assets",
+      "current_ratio",
+      "cash_to_assets",
+      "debt_to_assets",
+      "equity_to_assets",
+      "working_capital_to_assets",
+      "cash_to_current_liabilities",
+      "debt_to_equity",
+      "debt_partial"
+    ],
+    "accounting_flow": [
+      "roa",
+      "ebit_to_assets",
+      "sales_to_assets",
+      "retained_earnings_to_assets",
+      "cfo_to_assets",
+      "interest_coverage",
+      "loss_flag"
+    ],
+    "market_cover_page": [
+      "log_public_float",
+      "public_float_to_liabilities",
+      "public_float_age_days"
+    ],
+    "filing_metadata": [
+      "days_since_prev_filing",
+      "is_amendment",
+      "is_annual"
+    ],
+    "structural_accounting": [
+      "acct_dd",
+      "acct_pd",
+      "acct_d_va",
+      "acct_sigma_a",
+      "acct_mu"
+    ],
+    "structural_accounting_sensitivity": [
+      "acct_dd_mu0",
+      "acct_dd_debt",
+      "acct_d_va_debt"
+    ],
+    "structural_public_float": [
+      "pf_naive_dd",
+      "pf_naive_pd",
+      "pf_sigma_e",
+      "pf_e_to_d"
+    ]
+  },
+  "flow_tags": {
+    "revenue": [
+      "Revenues",
+      "RevenueFromContractWithCustomerExcludingAssessedTax",
+      "RevenueFromContractWithCustomerIncludingAssessedTax",
+      "SalesRevenueNet",
+      "SalesRevenueGoodsNet"
+    ],
+    "net_income": [
+      "NetIncomeLoss",
+      "ProfitLoss",
+      "NetIncomeLossAvailableToCommonStockholdersBasic"
+    ],
+    "operating_income": [
+      "OperatingIncomeLoss"
+    ],
+    "interest_expense": [
+      "InterestExpense",
+      "InterestExpenseDebt",
+      "InterestExpenseNonoperating"
+    ],
+    "cfo": [
+      "NetCashProvidedByUsedInOperatingActivities",
+      "NetCashProvidedByUsedInOperatingActivitiesContinuingOperations"
+    ]
+  },
+  "instant_tags": {
+    "retained_earnings": [
+      "RetainedEarningsAccumulatedDeficit"
+    ]
+  },
+  "rules": [
+    "All new facts come from the same accession as the panel row; flows must end on the reporting-period date.",
+    "Flow values are annualised: 12-month value if reported, else longest year-to-date duration x 12/months.",
+    "Ratio denominators below 1,000,000 are treated as missing (as in v1).",
+    "Public float is carried forward from the latest filing that reports it; public_float_age_days records staleness.",
+    "Public floats dated after the filing date, <= $100k, > $5T, or > 10,000 x assets are dropped as tagging/scale errors.",
+    "Accounting DD: V=book assets, D=CL+0.5*(L-CL), sigma_A from past filings shrunk to SIC2 median (train rows), mu=trailing asset growth.",
+    "Public-float DD: Bharath-Shumway naive DD with E=public float, sigma_E from float-implied price history (sector-shrunk), mu=past float-implied return.",
+    "Columns ending in _status, _months, _date, _hist_intervals are diagnostics, not predictors."
+  ],
+  "counts": {
+    "rows": 252943,
+    "firms": 10743,
+    "positive_rows": 2314,
+    "positive_firms": 684
+  },
+  "public_float_cleaning": {
+    "dropped_misdated": 130,
+    "dropped_implausible": 10226
+  },
+  "feature_coverage": {
+    "log_assets_usd": 0.9765,
+    "liabilities_to_assets": 0.6425,
+    "current_ratio": 0.8028,
+    "cash_to_assets": 0.7998,
+    "debt_to_assets": 0.476,
+    "equity_to_assets": 0.8037,
+    "working_capital_to_assets": 0.8008,
+    "cash_to_current_liabilities": 0.7685,
+    "debt_to_equity": 0.4585,
+    "debt_partial": 1.0,
+    "roa": 0.8317,
+    "ebit_to_assets": 0.7556,
+    "sales_to_assets": 0.7126,
+    "retained_earnings_to_assets": 0.7762,
+    "cfo_to_assets": 0.8323,
+    "interest_coverage": 0.3266,
+    "loss_flag": 0.9942,
+    "log_public_float": 0.8383,
+    "public_float_to_liabilities": 0.752,
+    "public_float_age_days": 0.8383,
+    "days_since_prev_filing": 0.9575,
+    "is_amendment": 1.0,
+    "is_annual": 1.0,
+    "acct_dd": 0.7889,
+    "acct_pd": 0.7889,
+    "acct_d_va": 0.7889,
+    "acct_sigma_a": 1.0,
+    "acct_mu": 1.0,
+    "acct_dd_mu0": 0.7889,
+    "acct_dd_debt": 0.4658,
+    "acct_d_va_debt": 0.4658,
+    "pf_naive_dd": 0.7924,
+    "pf_naive_pd": 0.7924,
+    "pf_sigma_e": 0.8383,
+    "pf_e_to_d": 0.7924
+  },
+  "feature_coverage_positive_rows": {
+    "log_assets_usd": 0.9939,
+    "liabilities_to_assets": 0.7541,
+    "current_ratio": 0.9347,
+    "cash_to_assets": 0.898,
+    "debt_to_assets": 0.6404,
+    "equity_to_assets": 0.885,
+    "working_capital_to_assets": 0.9382,
+    "cash_to_current_liabilities": 0.8855,
+    "debt_to_equity": 0.5994,
+    "debt_partial": 1.0,
+    "roa": 0.9447,
+    "ebit_to_assets": 0.863,
+    "sales_to_assets": 0.809,
+    "retained_earnings_to_assets": 0.8647,
+    "cfo_to_assets": 0.9369,
+    "interest_coverage": 0.4996,
+    "loss_flag": 0.9944,
+    "log_public_float": 0.8608,
+    "public_float_to_liabilities": 0.8436,
+    "public_float_age_days": 0.8608,
+    "days_since_prev_filing": 0.9745,
+    "is_amendment": 1.0,
+    "is_annual": 1.0,
+    "acct_dd": 0.8954,
+    "acct_pd": 0.8954,
+    "acct_d_va": 0.8954,
+    "acct_sigma_a": 1.0,
+    "acct_mu": 1.0,
+    "acct_dd_mu0": 0.8954,
+    "acct_dd_debt": 0.6275,
+    "acct_d_va_debt": 0.6275,
+    "pf_naive_dd": 0.8444,
+    "pf_naive_pd": 0.8444,
+    "pf_sigma_e": 0.8608,
+    "pf_e_to_d": 0.8444
+  }
+}
