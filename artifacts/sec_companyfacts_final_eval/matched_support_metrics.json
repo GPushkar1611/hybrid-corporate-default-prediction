@@ -1,0 +1,147 @@
+{
+  "support": {
+    "random_forest": {
+      "rows": 53511,
+      "firms": 4883,
+      "positive_rows": 582,
+      "positive_firms": 185
+    },
+    "xgboost": {
+      "rows": 53511,
+      "firms": 4883,
+      "positive_rows": 582,
+      "positive_firms": 185
+    },
+    "lstm_ensemble": {
+      "rows": 53511,
+      "firms": 4883,
+      "positive_rows": 582,
+      "positive_firms": 185
+    }
+  },
+  "models": {
+    "random_forest": {
+      "test_metrics_on_lstm_endpoint_support": {
+        "auroc": 0.8013638707731339,
+        "average_precision": 0.052662800045824514,
+        "brier_score": 0.09116024538863193,
+        "log_loss": 0.3062654624582792,
+        "top_decile_default_capture": 0.4072164948453608,
+        "precision": 0.041706011960969465,
+        "recall": 0.45532646048109965,
+        "confusion_matrix": [
+          [
+            46840,
+            6089
+          ],
+          [
+            317,
+            265
+          ]
+        ]
+      },
+      "firm_cluster_bootstrap": {
+        "unit": "firm cluster",
+        "requested_replicates": 500,
+        "valid_replicates": 500,
+        "interval_level": 0.95,
+        "percentile_intervals": {
+          "average_precision": [
+            0.03920607153273298,
+            0.07606767031329426
+          ],
+          "auroc": [
+            0.773365892131741,
+            0.8285775650236775
+          ],
+          "brier_score": [
+            0.08779398872391743,
+            0.09501904060654613
+          ]
+        }
+      }
+    },
+    "xgboost": {
+      "test_metrics_on_lstm_endpoint_support": {
+        "auroc": 0.8104321200825406,
+        "average_precision": 0.051978351712068785,
+        "brier_score": 0.12522585691989555,
+        "log_loss": 0.38430814692341886,
+        "top_decile_default_capture": 0.44673539518900346,
+        "precision": 0.03571428571428571,
+        "recall": 0.634020618556701,
+        "confusion_matrix": [
+          [
+            42966,
+            9963
+          ],
+          [
+            213,
+            369
+          ]
+        ]
+      },
+      "firm_cluster_bootstrap": {
+        "unit": "firm cluster",
+        "requested_replicates": 500,
+        "valid_replicates": 500,
+        "interval_level": 0.95,
+        "percentile_intervals": {
+          "average_precision": [
+            0.03925798867224441,
+            0.07277730967804996
+          ],
+          "auroc": [
+            0.7820214503950338,
+            0.838417368593623
+          ],
+          "brier_score": [
+            0.12110874123101234,
+            0.13036697338017184
+          ]
+        }
+      }
+    },
+    "lstm_ensemble": {
+      "test_metrics_on_lstm_endpoint_support": {
+        "auroc": 0.7894017265819172,
+        "average_precision": 0.04743324576433059,
+        "brier_score": 0.11035679835618614,
+        "log_loss": 0.3459774701384765,
+        "top_decile_default_capture": 0.422680412371134,
+        "precision": 0.039122137404580155,
+        "recall": 0.563573883161512,
+        "confusion_matrix": [
+          [
+            44873,
+            8056
+          ],
+          [
+            254,
+            328
+          ]
+        ]
+      },
+      "firm_cluster_bootstrap": {
+        "unit": "firm cluster",
+        "requested_replicates": 500,
+        "valid_replicates": 500,
+        "interval_level": 0.95,
+        "percentile_intervals": {
+          "average_precision": [
+            0.03564887332481162,
+            0.06984625189645244
+          ],
+          "auroc": [
+            0.7593461172336249,
+            0.8192814986626704
+          ],
+          "brier_score": [
+            0.10574809500048615,
+            0.11518043123658232
+          ]
+        }
+      }
+    }
+  }
+}

@@ -34,7 +34,16 @@ import pandas as pd
 import yfinance as yf
 import pandas_datareader.data as web
 
-HEADERS = {'User-Agent': 'UniversityResearcher researcher@domain.edu'}   # <- EDIT
+def sec_headers():
+    """Return a real project User-Agent; never send the repository placeholder."""
+    user_agent = os.environ.get('SEC_USER_AGENT', '').strip()
+    if '@' not in user_agent or 'domain.edu' in user_agent.lower():
+        raise RuntimeError(
+            'Set SEC_USER_AGENT to a descriptive project name and a real contact email before SEC API requests.'
+        )
+    return {'User-Agent': user_agent}
+
+
 CACHE_DIR = 'sec_cache'
 
 # priority order: first tag with a value for a given fiscal year-end wins
@@ -60,7 +69,7 @@ def fetch_companyfacts(cik_str, cache_dir=CACHE_DIR, use_cache=True):
     url = f"https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json"
     for attempt in range(4):
         time.sleep(0.15)                          # SEC limit: <10 requests/s
-        resp = requests.get(url, headers=HEADERS)
+        resp = requests.get(url, headers=sec_headers(), timeout=(20, 90))
         if resp.status_code == 200:
             data = resp.json()
             with open(path, 'w') as f:

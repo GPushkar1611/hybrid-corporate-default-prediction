@@ -1,0 +1,143 @@
+{
+  "dataset": "D:\\IITH\\Sem 5\\AI4403 - AI in Finance\\hybrid-corporate-default-prediction\\artifacts\\edgar_bankruptcy_v1\\bankruptcy_panel.csv",
+  "features": [
+    "D",
+    "r",
+    "debt_age_days",
+    "debt_partial",
+    "E",
+    "sigma_E"
+  ],
+  "sequence_features_after_missing_indicators": [
+    "D",
+    "r",
+    "debt_age_days",
+    "debt_partial",
+    "E",
+    "sigma_E",
+    "missingindicator_sigma_E"
+  ],
+  "sequence_window_months": 12,
+  "label_horizon_months": 12,
+  "split": {
+    "train_end": "2018-12-31",
+    "validation_start": "2020-01-01",
+    "validation_end": "2020-12-31",
+    "test_start": "2022-01-01",
+    "purge_1": "2019-01-01 through 2019-12-31",
+    "purge_2": "2021-01-01 through 2021-12-31",
+    "firms_can_overlap_across_time_partitions": true
+  },
+  "model": {
+    "architecture": "one-layer unidirectional LSTM, hidden_size=32, dropout=0.2",
+    "epochs": 10,
+    "batch_size": 256,
+    "learning_rate": 0.001,
+    "random_state": 42,
+    "training_scale_pos_weight": 301.12307692307695,
+    "training_loss_by_epoch": [
+      1.3201725655459668,
+      0.9150452869391779,
+      0.5462939816533045,
+      0.4845520220101274,
+      0.37112891413927784,
+      0.30236388775248285,
+      0.3266487315969417,
+      0.2597621286494485,
+      0.2207594923792673,
+      0.20251807609459377
+    ]
+  },
+  "preprocessing": {
+    "imputer": "median with missingness indicators",
+    "scaler": "StandardScaler",
+    "fit_rows": "observations dated on/before 2018-12-31"
+  },
+  "partitions": {
+    "train": {
+      "sequences": 19638,
+      "firms": 349,
+      "positive_endpoints": 65,
+      "positive_firms": 6,
+      "positive_rate": 0.003309909359405235
+    },
+    "validation": {
+      "sequences": 4626,
+      "firms": 393,
+      "positive_endpoints": 10,
+      "positive_firms": 2,
+      "positive_rate": 0.00216169476869866
+    },
+    "test": {
+      "sequences": 17754,
+      "firms": 559,
+      "positive_endpoints": 48,
+      "positive_firms": 4,
+      "positive_rate": 0.0027036160865157146
+    }
+  },
+  "sequence_coverage": {
+    "train": {
+      "panel_endpoints": 23718,
+      "sequence_endpoints": 19638,
+      "endpoints_without_full_window": 4080,
+      "positive_panel_endpoints": 107,
+      "positive_endpoints_without_full_window": 42
+    },
+    "validation": {
+      "panel_endpoints": 4869,
+      "sequence_endpoints": 4626,
+      "endpoints_without_full_window": 243,
+      "positive_panel_endpoints": 17,
+      "positive_endpoints_without_full_window": 7
+    },
+    "test": {
+      "panel_endpoints": 19278,
+      "sequence_endpoints": 17754,
+      "endpoints_without_full_window": 1524,
+      "positive_panel_endpoints": 48,
+      "positive_endpoints_without_full_window": 0
+    }
+  },
+  "metrics": {
+    "validation": {
+      "auroc": 0.5906737435008665,
+      "average_precision": 0.002991269222108339,
+      "brier_score": 0.028856319951580806,
+      "log_loss": 0.10658487799083599,
+      "top_decile_default_capture": 0.0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "confusion_matrix": [
+        [
+          4461,
+          155
+        ],
+        [
+          10,
+          0
+        ]
+      ]
+    },
+    "test": {
+      "auroc": 0.8539407545464814,
+      "average_precision": 0.008467452073420794,
+      "brier_score": 0.017643533233677795,
+      "log_loss": 0.06913109303118051,
+      "top_decile_default_capture": 0.20833333333333334,
+      "precision": 0.0,
+      "recall": 0.0,
+      "confusion_matrix": [
+        [
+          17311,
+          395
+        ],
+        [
+          48,
+          0
+        ]
+      ]
+    }
+  },
+  "warning": "One fixed pipeline run only. Event counts are small; the test contains only 4 positive firms. Do not interpret metrics as model performance evidence."
+}

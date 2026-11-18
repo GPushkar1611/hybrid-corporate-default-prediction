@@ -1,8 +1,10 @@
 """
 build_panel.py -- firm-month panel with bankruptcy labels and Merton features.
 
-Input : bankruptcies_covered.csv (price_status == ok rows are used) and controls.csv
+Input : bankruptcies_covered.csv (price_status == ok rows are used), controls.csv,
+        and bankruptcies.csv (full EDGAR event inventory, used to exclude cases from controls)
 Output: panel.csv  (one row per firm-month: label y, D, r, structural features)
+        and panel_build_failures.csv (firm-level data-collection failures)
 
 Label for firm i, month-end t:
     y = 1  if the firm's bankruptcy_date lies in (t, t + 12 months]
@@ -11,6 +13,7 @@ Label for firm i, month-end t:
 
 Usage
   python build_panel.py --bankrupt bankruptcies_covered.csv --controls controls.csv \
+                        --all-events bankruptcies.csv \
                         --start 2009-01-01 --end 2024-12-31 --out panel.csv
 """
 import argparse
@@ -72,18 +75,28 @@ def prior_correct(p_sampled, beta):
 if __name__ == '__main__':
     ap = argparse.ArgumentParser()
     ap.add_argument('--bankrupt', required=True); ap.add_argument('--controls', required=True)
+    ap.add_argument('--all-events', default='bankruptcies.csv',
+                    help='full EDGAR event table; all known event firms are excluded from controls')
     ap.add_argument('--start', default='2009-01-01'); ap.add_argument('--end', default='2024-12-31')
     ap.add_argument('--out', default='panel.csv')
+    ap.add_argument('--failures-out', default='panel_build_failures.csv',
+                    help='CSV log of firm-level collection/build failures')
     a = ap.parse_args()
 
     bk = pd.read_csv(a.bankrupt, parse_dates=['bankruptcy_date'])
     bk = bk[bk['price_status'] == 'ok']
     ct = pd.read_csv(a.controls)
+    all_events = pd.read_csv(a.all_events, usecols=['cik'])
+    event_ciks = set(pd.to_numeric(all_events['cik'], errors='raise').astype('int64'))
+    controls_before = len(ct)
+    ct = ct[~pd.to_numeric(ct['cik'], errors='raise').astype('int64').isin(event_ciks)].copy()
+    print(f'Excluded {controls_before - len(ct)} sampled controls with a known EDGAR event')
     firms = pd.concat([bk[['cik', 'ticker']], ct[['cik', 'ticker']]]).drop_duplicates('cik')
     df_rf = d.fetch_risk_free(a.start, a.end)
 
     panels, failures = collect_panels(firms, a.start, a.end, df_rf)
-    print(f'{len(panels)} firms built, {len(failures)} failed (e.g. {failures[:3]})')
+    pd.DataFrame(failures, columns=['cik', 'ticker', 'error']).to_csv(a.failures_out, index=False)
+    print(f'{len(panels)} firms built, {len(failures)} failed; full failure log: {a.failures_out}')
     obs, daily_eq = to_model_inputs(panels, dict(zip(bk['cik'], bk['bankruptcy_date'])))
     feats = m.compute_structural_features(obs, daily_eq, firm_col='firm')
     panel = pd.concat([obs, feats], axis=1)

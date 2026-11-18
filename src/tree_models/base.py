@@ -42,13 +42,16 @@ class TreeModel(ABC):
             remainder="drop",
         )
         self.pipeline = Pipeline([("preprocess", preprocessor), ("model", self._estimator())])
-        self.pipeline.fit(dataset.X, dataset.y)
+        # XBRL/structural ratios can contain +/-inf after division by values
+        # near zero. Treat those as missing so train-only imputers can handle
+        # them consistently at fit and prediction time.
+        self.pipeline.fit(_replace_infinities(dataset.X), dataset.y)
         return self
 
     def predict_proba(self, dataset: ModelDataset):
         if self.pipeline is None:
             raise RuntimeError("Fit the model before prediction.")
-        return self.pipeline.predict_proba(dataset.X)[:, 1]
+        return self.pipeline.predict_proba(_replace_infinities(dataset.X))[:, 1]
 
     def save(self, path: str | Path) -> None:
         if self.pipeline is None:
@@ -58,3 +61,7 @@ class TreeModel(ABC):
     @staticmethod
     def load(path: str | Path):
         return joblib.load(path)
+
+
+def _replace_infinities(features):
+    return features.replace([float("inf"), float("-inf")], float("nan"))

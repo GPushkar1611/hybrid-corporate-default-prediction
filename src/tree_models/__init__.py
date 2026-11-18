@@ -5,7 +5,7 @@ from .data import ModelDataset, TemporalSplit
 from .evaluation import evaluate_binary
 from .features import build_snapshot_features, build_window_features
 from .random_forest import RandomForestModel
-from .splits import temporal_split
+from .splits import purged_temporal_split, temporal_split
 from .validation import validate_dataset
 from .xgboost_model import XGBoostModel
 
@@ -18,6 +18,7 @@ __all__ = [
     "build_snapshot_features",
     "build_window_features",
     "temporal_split",
+    "purged_temporal_split",
     "validate_dataset",
     "evaluate_binary",
 ]

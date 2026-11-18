@@ -1,0 +1,22 @@
+{
+  "validated_utc": "2026-11-18T08:01:40.411649+00:00",
+  "source_archive": "D:\\IITH\\Sem 5\\AI4403 - AI in Finance\\hybrid-corporate-default-prediction\\sec_bulk\\submissions.zip",
+  "source_archive_bytes": 1576372211,
+  "source_archive_sha256": "8ec694f166a2e9157eeb27181dcb6de73a9e0ed3cad7d3f11c7dc0b647d37396",
+  "local_event_file": "D:\\IITH\\Sem 5\\AI4403 - AI in Finance\\hybrid-corporate-default-prediction\\bankruptcies.csv",
+  "local_event_file_sha256": "7923f316ab3f16caf6fa202730d07441997fd9d6349c901315c51167b5c41d2d",
+  "source_event_definition": "All 8-K/8-K-A submissions with SEC item 1.03 since 2010; event date is reportDate when valid and not after filingDate, otherwise filingDate; financial SIC 6000-6999 excluded.",
+  "local_event_firms": 990,
+  "sec_rebuilt_event_firms": 993,
+  "status_counts": {
+    "match": 978,
+    "valid_alternate_accession_same_date": 12,
+    "sec_only": 3
+  },
+  "date_mismatches": 0,
+  "accession_mismatches": 0,
+  "local_only_events": 0,
+  "sec_only_events": 3,
+  "local_accessions_verified": 990,
+  "assessment": "pass_with_new_sec_events"
+}

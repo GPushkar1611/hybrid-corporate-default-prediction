@@ -16,7 +16,7 @@ Usage
   python edgar_labels.py prices    --table bankruptcies.csv --out bankruptcies_covered.csv
   python edgar_labels.py controls  --tickers company_tickers.json \
                                    --submissions sec_bulk/submissions.zip \
-                                   --bankrupt bankruptcies_covered.csv --n 1500 --out controls.csv
+                                   --bankrupt bankruptcies.csv --n 1500 --out controls.csv
 
 Files are LARGE (companyfacts ~ >1 GB, submissions several GB). The SEC wants a
 descriptive User-Agent with a real contact: edit UA below.
@@ -34,7 +34,15 @@ import requests
 
 import data as d     # parse_fundamentals / parse_shares / yfinance handle
 
-UA = 'UniversityResearcher researcher@domain.edu'          # <- EDIT
+def _sec_headers():
+    user_agent = os.environ.get('SEC_USER_AGENT', '').strip()
+    if '@' not in user_agent or 'domain.edu' in user_agent.lower():
+        raise RuntimeError(
+            'Set SEC_USER_AGENT to a descriptive project name and a real contact email before SEC requests.'
+        )
+    return {'User-Agent': user_agent}
+
+
 URLS = {
     'submissions': 'https://www.sec.gov/Archives/edgar/daily-index/bulkdata/submissions.zip',
     'companyfacts': 'https://www.sec.gov/Archives/edgar/daily-index/xbrl/companyfacts.zip',
@@ -55,7 +63,7 @@ def download_bulk(dest_dir='sec_bulk', which=('submissions', 'companyfacts')):
             print(f'{path} exists, skipping')
             continue
         print(f'downloading {URLS[key]} -> {path} (large; be patient)')
-        with requests.get(URLS[key], headers={'User-Agent': UA}, stream=True) as r:
+        with requests.get(URLS[key], headers=_sec_headers(), stream=True, timeout=(30, 300)) as r:
             r.raise_for_status()
             with open(path, 'wb') as f:
                 for chunk in r.iter_content(1 << 20):
@@ -67,7 +75,7 @@ def download_company_tickers(path='company_tickers.json'):
     if os.path.exists(path):
         return path
     print(f'{path} not found; downloading {TICKERS_URL}')
-    r = requests.get(TICKERS_URL, headers={'User-Agent': UA})
+    r = requests.get(TICKERS_URL, headers=_sec_headers(), timeout=(20, 90))
     r.raise_for_status()
     with open(path, 'w') as f:
         f.write(r.text)
@@ -144,13 +152,21 @@ def build_bankruptcy_table(submissions_zip, since='2010-01-01',
     ok = df['report_date'].notna() & (df['report_date'] <= df['filing_date'])
     df['event_date'] = df['report_date'].where(ok, df['filing_date'])
     df = df[df['event_date'] >= since]
-    g = df.sort_values('event_date').groupby('cik')
-    tab = pd.DataFrame({
-        'bankruptcy_date': g['event_date'].min(),
-        'first_filing_date': g['filing_date'].min(),
-        'n_1_03_filings': g.size(),
-        'first_accession': g['accession'].first(),
-    }).reset_index()
+    # Select one actual first-event filing deterministically. Previously the
+    # event date, filing date, and accession were aggregated independently,
+    # so same-event-date filings could produce a mismatched accession/date row.
+    ordered = df.sort_values(
+        ['cik', 'event_date', 'filing_date', 'accession'], kind='stable'
+    )
+    first = ordered.drop_duplicates('cik', keep='first').rename(columns={
+        'event_date': 'bankruptcy_date',
+        'filing_date': 'first_filing_date',
+        'accession': 'first_accession',
+    })
+    counts = ordered.groupby('cik', as_index=False).size().rename(columns={'size': 'n_1_03_filings'})
+    tab = first[['cik', 'bankruptcy_date', 'first_filing_date', 'first_accession']].merge(
+        counts, on='cik', how='left', validate='one_to_one'
+    )
     tab = tab.merge(pd.DataFrame.from_dict(meta, orient='index').rename_axis('cik').reset_index(),
                     on='cik', how='left')
     n0 = len(tab)
@@ -295,7 +311,9 @@ if __name__ == '__main__':
     c.add_argument('--overrides', help='optional CSV with columns cik,ticker for manual matches')
     e = sub.add_parser('controls')
     e.add_argument('--tickers', default='company_tickers.json', help='auto-downloaded if missing'); e.add_argument('--submissions', required=True)
-    e.add_argument('--bankrupt', required=True); e.add_argument('--n', type=int, default=1500)
+    e.add_argument('--bankrupt', required=True,
+                   help='full bankruptcy event table (bankruptcies.csv), not only the covered subset')
+    e.add_argument('--n', type=int, default=1500)
     e.add_argument('--out', default='controls.csv')
     args = ap.parse_args()
 

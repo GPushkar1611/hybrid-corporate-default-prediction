@@ -1,0 +1,103 @@
+{
+  "dataset": "SEC EDGAR normalized CompanyFacts bankruptcy panel",
+  "version": "1.1.0",
+  "generated_utc": "2026-11-18T09:13:30.387428+00:00",
+  "financial_source": "SEC Company Facts bulk API, us-gaap, values normalized by SEC; filing metadata/SIC from SEC Financial Statement Data Sets SUB files.",
+  "label_source": "D:\\IITH\\Sem 5\\AI4403 - AI in Finance\\hybrid-corporate-default-prediction\\artifacts\\sec_event_validation\\sec_item_1_03_events_rebuilt.csv",
+  "label_source_sha256": "4bf8317eee1fe04fe8d83cc38bd44d64f45d752d99e528f02f0ad404f89530a1",
+  "event_definition": "First SEC 8-K/8-K-A Item 1.03 bankruptcy date rebuilt from SEC submissions bulk; y=1 if event is after filing date and within 12 months.",
+  "feature_availability": "CompanyFacts values are selected by the same accession number and exact reporting-period end date as the FSDS filing snapshot; filing date is the prediction-time boundary.",
+  "sec_fsds_scale_audit": "FSDS NUM.value is documented as unscaled and was excluded from model features after sample checks produced impossible asset/liability ratios. Only SUB metadata is used from FSDS.",
+  "sources": {
+    "fsds_archives_manifest": "D:\\IITH\\Sem 5\\AI4403 - AI in Finance\\hybrid-corporate-default-prediction\\sec_bulk\\fsds\\download_manifest.json",
+    "fsds_archives_manifest_sha256": "4dbe05cdcd96f13958f8d47357d4f4d55493435a9538815a27ea67dc6cecdffe",
+    "companyfacts_archive": "D:\\IITH\\Sem 5\\AI4403 - AI in Finance\\hybrid-corporate-default-prediction\\sec_bulk\\companyfacts.zip",
+    "companyfacts_archive_sha256": "8610f83db14e642d0057803dd0f03bce32f7115ba9005192de43cb589dcc583c",
+    "submissions_archive_manifest": "D:\\IITH\\Sem 5\\AI4403 - AI in Finance\\hybrid-corporate-default-prediction\\sec_bulk\\submissions_manifest.json",
+    "submissions_archive_manifest_sha256": "e52fcf44734616e8b6a60f4fdda9823bde0e74f9ed0a10af7f08afb531c29eae"
+  },
+  "cutoffs": {
+    "financial_submissions_through": "2025-10-31",
+    "label_inventory_as_of": "2026-11-17",
+    "mature_12_month_label_cutoff": "2025-10-31",
+    "horizon_months": 12
+  },
+  "features": [
+    "log_assets_usd",
+    "liabilities_to_assets",
+    "current_ratio",
+    "cash_to_assets",
+    "debt_to_assets",
+    "equity_to_assets",
+    "working_capital_to_assets",
+    "cash_to_current_liabilities",
+    "debt_to_equity",
+    "debt_partial"
+  ],
+  "tag_aliases": {
+    "assets": [
+      "Assets"
+    ],
+    "current_assets": [
+      "AssetsCurrent"
+    ],
+    "liabilities": [
+      "Liabilities"
+    ],
+    "current_liabilities": [
+      "LiabilitiesCurrent"
+    ],
+    "cash": [
+      "CashAndCashEquivalentsAtCarryingValue",
+      "CashCashEquivalentsRestrictedCashAndRestrictedCashEquivalents"
+    ],
+    "equity": [
+      "StockholdersEquity",
+      "StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest",
+      "StockholdersEquityIncludingPortionAttributableToNoncontrollingInterestAndRedeemableNoncontrollingInterest"
+    ],
+    "short_debt": [
+      "ShortTermBorrowings",
+      "LongTermDebtCurrent",
+      "LongTermDebtAndCapitalLeaseObligationsCurrent",
+      "LongTermDebtAndFinanceLeaseObligationsCurrent",
+      "CurrentPortionOfLongTermDebtCurrent",
+      "ShortTermDebtCurrent",
+      "CommercialPaper"
+    ],
+    "long_debt": [
+      "LongTermDebtNoncurrent",
+      "LongTermDebtAndCapitalLeaseObligationsNoncurrent",
+      "LongTermDebtAndFinanceLeaseObligationsNoncurrent",
+      "LongTermDebt",
+      "LongTermDebtAndCapitalLeaseObligations",
+      "LongTermDebtAndFinanceLeaseObligations"
+    ]
+  },
+  "feature_quality_rules": [
+    "CompanyFacts instant fact end date must exactly equal the FSDS reporting period date and the accession must exactly match.",
+    "Ratio denominators below 1,000,000 reporting-currency units are treated as missing; filing rows and log-assets remain.",
+    "Negative liabilities and negative cash are treated as missing for ratios; current assets or cash above 105% of total assets are treated as inconsistent and omitted from the affected ratios.",
+    "No arbitrary ratio winsorization is performed during dataset generation; model preprocessing fits clipping bounds on training data only."
+  ],
+  "counts": {
+    "rows": 252943,
+    "firms": 10743,
+    "positive_rows": 2314,
+    "positive_firms": 684,
+    "event_firms_with_companyfacts": 778,
+    "event_firms_in_source_inventory": 993,
+    "date_min": "2010-01-05",
+    "date_max": "2025-10-31",
+    "duplicate_firm_date_rows": 0,
+    "rows_missing_all_model_features": 0,
+    "sic_missing_rows": 1724,
+    "usd_reporting_rows": 252335
+  },
+  "limitations": [
+    "CompanyFacts includes standard non-custom, entity-wide XBRL facts only; custom taxonomies and dimensional facts are not represented.",
+    "CompanyFacts and FSDS are SEC-derived structured data and are not a substitute for checking original filings when a fact is implausible.",
+    "Non-event controls are filers with no known Item 1.03 event in the rebuilt submissions inventory; the label means no recorded event, not necessarily economic solvency.",
+    "This accounting-only panel does not contain market variables or structural distance-to-default outputs."
+  ]
+}

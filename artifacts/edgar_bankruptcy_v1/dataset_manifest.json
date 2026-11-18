@@ -1,0 +1,107 @@
+{
+  "dataset_name": "SEC EDGAR bankruptcy prediction panel",
+  "dataset_version": "0.1.0",
+  "generated_utc": "2026-11-18T02:42:45.843345+00:00",
+  "files": {
+    "bankruptcy_panel.csv": "Firm-month modelling panel. One row per firm and month-end.",
+    "edgar_event_inventory.csv": "All bankruptcy event rows available in the local SEC-derived bankruptcy label table, with coverage path through price checks and panel inclusion.",
+    "firm_label_coverage.csv": "Per-firm observations and 12-month label coverage for firms present in the modelling panel.",
+    "audit.json": "Machine-readable counts, input hashes, consistency checks, origin, and limitations.",
+    "README.md": "Human-readable data dictionary and construction notes."
+  },
+  "source_artifacts": {
+    "panel": {
+      "path": "C:\\Users\\vijay\\Downloads\\panel.csv",
+      "sha256": "edd1b1b29cd07987b5488281ca7cc2c026eaca736b07eae915c3ad993d227d2c"
+    },
+    "bankruptcies": {
+      "path": "D:\\IITH\\Sem 5\\AI4403 - AI in Finance\\hybrid-corporate-default-prediction\\bankruptcies.csv",
+      "sha256": "7923f316ab3f16caf6fa202730d07441997fd9d6349c901315c51167b5c41d2d"
+    },
+    "covered": {
+      "path": "D:\\IITH\\Sem 5\\AI4403 - AI in Finance\\hybrid-corporate-default-prediction\\bankruptcies_covered.csv",
+      "sha256": "959e4dd5aecb7a64fb2d7a9831e21a76d194702ac698278e3a0e4cb4141a3f31"
+    },
+    "controls": {
+      "path": "D:\\IITH\\Sem 5\\AI4403 - AI in Finance\\hybrid-corporate-default-prediction\\controls.csv",
+      "sha256": "2ffc068e9d228ee18e1c1794f04ac1634a31d2a1b607b0f6fd20e56e3d576a23"
+    }
+  },
+  "origin": {
+    "event_source": "Repository SEC-derived event table. The upstream edgar_labels.py describes SEC submissions bulk data (submissions.zip) and companyfacts bulk data (companyfacts.zip).",
+    "fresh_sec_fetch": false,
+    "raw_sec_archives_available_in_checkout": false,
+    "event_rule": "First SEC 8-K or 8-K/A with Item 1.03 (Bankruptcy or Receivership), beginning 2010; bankruptcy_date uses reportDate when not after filingDate, otherwise filingDate.",
+    "feature_source": "Previously generated panel.csv; point-in-time firm data assembled by data.py and build_panel.py from SEC fundamentals/shares, Yahoo Finance prices, and FRED DGS1 rates."
+  },
+  "target": {
+    "column": "y",
+    "meaning": "1 when the first SEC Item 1.03 event date is after the observation date and no more than 12 calendar months later; otherwise 0.",
+    "censoring": "Panel observations end 2024-12-30. The event inventory extends later; events more than 12 months after a firm's final panel observation do not create positive rows in this extract."
+  },
+  "keys": [
+    "firm",
+    "date"
+  ],
+  "target_column": "y",
+  "identifier_and_diagnostic_columns_not_for_model_features": [
+    "firm",
+    "date",
+    "y",
+    "bankrupt_firm",
+    "*_status"
+  ],
+  "known_limitations": [
+    "Controls were sampled from the current SEC ticker list and are survivor-selected by construction.",
+    "The original control draw excluded only the fundamentals-covered bankruptcy subset. This builder cross-checks every sampled firm against the full EDGAR event table, corrects the event flag, and removes observations on/after known events.",
+    "Panel construction requires a usable historical ticker and market-price history; many SEC bankruptcy events are therefore absent from the modelling panel.",
+    "Source panel ends before current label artifacts; events after its observation range cannot contribute positive rows.",
+    "Raw SEC bulk archives are not present in the repository, so the source artifacts cannot be independently rebuilt from this checkout alone."
+  ],
+  "input_files": {
+    "panel": "C:\\Users\\vijay\\Downloads\\panel.csv",
+    "bankruptcies": "D:\\IITH\\Sem 5\\AI4403 - AI in Finance\\hybrid-corporate-default-prediction\\bankruptcies.csv",
+    "covered": "D:\\IITH\\Sem 5\\AI4403 - AI in Finance\\hybrid-corporate-default-prediction\\bankruptcies_covered.csv",
+    "controls": "D:\\IITH\\Sem 5\\AI4403 - AI in Finance\\hybrid-corporate-default-prediction\\controls.csv"
+  },
+  "counts": {
+    "bankruptcy_label_rows": 990,
+    "bankruptcy_firms": 990,
+    "fundamentals_status_counts": {
+      "ok": 489,
+      "no_debt": 237,
+      "no_xbrl": 143,
+      "stale": 99,
+      "no_shares": 22
+    },
+    "covered_label_rows": 489,
+    "covered_price_status_counts": {
+      "no_ticker": 436,
+      "ok": 29,
+      "no_prices": 24
+    },
+    "control_rows": 1500,
+    "known_event_firms_in_control_sample": 10,
+    "source_panel_rows": 58357,
+    "source_panel_firms": 607,
+    "panel_rows": 57749,
+    "panel_firms": 599,
+    "panel_date_min": "2010-11-30",
+    "panel_date_max": "2024-12-30",
+    "positive_month_rows": 186,
+    "positive_firms": 17,
+    "panel_event_firms": 27,
+    "control_firms_in_panel": 572,
+    "event_firms_in_panel": 27,
+    "source_event_firms_in_panel": 35,
+    "price_eligible_event_firms_absent_from_panel": 3,
+    "event_firms_with_no_positive_rows": 10,
+    "event_firms_right_censored_beyond_12_months": 10,
+    "kmv_nonzero_status_rows": 4867,
+    "post_event_source_rows_removed": 608,
+    "duplicate_firm_date_rows": 0,
+    "source_target_mismatch_rows_against_full_edgar_inventory": 0,
+    "source_bankrupt_flag_mismatch_rows_against_full_edgar_inventory": 617,
+    "corrected_target_mismatch_rows_against_full_edgar_inventory": 0
+  }
+}

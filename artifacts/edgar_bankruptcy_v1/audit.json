@@ -1,0 +1,78 @@
+{
+  "audit_version": 1,
+  "inputs": {
+    "C:\\Users\\vijay\\Downloads\\panel.csv": {
+      "bytes": 35115720,
+      "sha256": "edd1b1b29cd07987b5488281ca7cc2c026eaca736b07eae915c3ad993d227d2c"
+    },
+    "bankruptcies.csv": {
+      "bytes": 107625,
+      "sha256": "7923f316ab3f16caf6fa202730d07441997fd9d6349c901315c51167b5c41d2d"
+    },
+    "bankruptcies_covered.csv": {
+      "bytes": 60948,
+      "sha256": "959e4dd5aecb7a64fb2d7a9831e21a76d194702ac698278e3a0e4cb4141a3f31"
+    },
+    "controls.csv": {
+      "bytes": 64495,
+      "sha256": "2ffc068e9d228ee18e1c1794f04ac1634a31d2a1b607b0f6fd20e56e3d576a23"
+    }
+  },
+  "label_origin": {
+    "available_artifacts": [
+      "bankruptcies.csv",
+      "bankruptcies_covered.csv"
+    ],
+    "event_definition": "First SEC 8-K or 8-K/A with Item 1.03 (Bankruptcy or Receivership), beginning 2010; bankruptcy_date uses reportDate when not after filingDate, otherwise filingDate.",
+    "raw_sec_archives_present": false,
+    "fresh_sec_download_performed": false,
+    "note": "This run audits repository artifacts generated from SEC data; it does not independently re-fetch or re-verify SEC records."
+  },
+  "counts": {
+    "bankruptcy_label_rows": 990,
+    "bankruptcy_firms": 990,
+    "fundamentals_status_counts": {
+      "ok": 489,
+      "no_debt": 237,
+      "no_xbrl": 143,
+      "stale": 99,
+      "no_shares": 22
+    },
+    "covered_label_rows": 489,
+    "covered_price_status_counts": {
+      "no_ticker": 436,
+      "ok": 29,
+      "no_prices": 24
+    },
+    "control_rows": 1500,
+    "known_event_firms_in_control_sample": 10,
+    "source_panel_rows": 58357,
+    "source_panel_firms": 607,
+    "panel_rows": 57749,
+    "panel_firms": 599,
+    "panel_date_min": "2010-11-30",
+    "panel_date_max": "2024-12-30",
+    "positive_month_rows": 186,
+    "positive_firms": 17,
+    "panel_event_firms": 27,
+    "control_firms_in_panel": 572,
+    "event_firms_in_panel": 27,
+    "source_event_firms_in_panel": 35,
+    "price_eligible_event_firms_absent_from_panel": 3,
+    "event_firms_with_no_positive_rows": 10,
+    "event_firms_right_censored_beyond_12_months": 10,
+    "kmv_nonzero_status_rows": 4867,
+    "post_event_source_rows_removed": 608,
+    "duplicate_firm_date_rows": 0,
+    "source_target_mismatch_rows_against_full_edgar_inventory": 0,
+    "source_bankrupt_flag_mismatch_rows_against_full_edgar_inventory": 617,
+    "corrected_target_mismatch_rows_against_full_edgar_inventory": 0
+  },
+  "limitations": [
+    "Controls were sampled from the current SEC ticker list and are survivor-selected by construction.",
+    "The original control draw excluded only the fundamentals-covered bankruptcy subset. This builder cross-checks every sampled firm against the full EDGAR event table, corrects the event flag, and removes observations on/after known events.",
+    "Panel construction requires a usable historical ticker and market-price history; many SEC bankruptcy events are therefore absent from the modelling panel.",
+    "Source panel ends before current label artifacts; events after its observation range cannot contribute positive rows.",
+    "Raw SEC bulk archives are not present in the repository, so the source artifacts cannot be independently rebuilt from this checkout alone."
+  ]
+}

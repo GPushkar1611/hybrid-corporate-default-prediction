@@ -1,0 +1,88 @@
+{
+  "status": "PASS",
+  "panel": "D:\\IITH\\Sem 5\\AI4403 - AI in Finance\\hybrid-corporate-default-prediction\\artifacts\\sec_companyfacts_bankruptcy_v1\\sec_bankruptcy_panel.csv",
+  "dataset_version": "1.1.0",
+  "checks": {
+    "rows": 252943,
+    "firms": 10743,
+    "positive_rows": 2314,
+    "positive_firms": 684,
+    "duplicate_firm_date_rows": 0,
+    "duplicate_firm_accession_rows": 0,
+    "invalid_positive_labels": 0,
+    "missed_positive_labels": 0,
+    "post_event_rows": 0,
+    "rows_after_maturity_cutoff": 0,
+    "nonfinite_feature_cells": 0,
+    "rows_missing_all_features": 0,
+    "event_inventory_assessment": "pass_with_new_sec_events",
+    "local_accessions_verified": 990,
+    "sec_only_event_firms": 3
+  },
+  "feature_missingness_fraction": {
+    "log_assets_usd": 0.02347959817033877,
+    "liabilities_to_assets": 0.3575192830005179,
+    "current_ratio": 0.19721834563518262,
+    "cash_to_assets": 0.20018739399785723,
+    "debt_to_assets": 0.5239599435445931,
+    "equity_to_assets": 0.19630114294524853,
+    "working_capital_to_assets": 0.19922670324934866,
+    "cash_to_current_liabilities": 0.23148693579185825,
+    "debt_to_equity": 0.5414935380698418,
+    "debt_partial": 0.0
+  },
+  "ratio_quantiles": {
+    "0.01": {
+      "liabilities_to_assets": 0.02761309289951272,
+      "current_ratio": 0.0024089784416922748,
+      "cash_to_assets": 0.000129152853922328,
+      "debt_to_assets": 0.0,
+      "equity_to_assets": -4.238802231366605,
+      "working_capital_to_assets": -3.3301638824797974,
+      "cash_to_current_liabilities": 8.462265348433776e-05,
+      "debt_to_equity": -14.268527800710078
+    },
+    "0.5": {
+      "liabilities_to_assets": 0.5169995605551004,
+      "current_ratio": 1.7035824298710465,
+      "cash_to_assets": 0.0999454211666639,
+      "debt_to_assets": 0.2700563655993835,
+      "equity_to_assets": 0.45108399491526935,
+      "working_capital_to_assets": 0.17404492328325605,
+      "cash_to_current_liabilities": 0.4196288952835114,
+      "debt_to_equity": 0.47225954768832323
+    },
+    "0.95": {
+      "liabilities_to_assets": 1.7491012910375836,
+      "current_ratio": 10.41218997526378,
+      "cash_to_assets": 0.7833200779011222,
+      "debt_to_assets": 0.7930199084993687,
+      "equity_to_assets": 0.9123071440384921,
+      "working_capital_to_assets": 0.8277962081416438,
+      "cash_to_current_liabilities": 5.85361751054167,
+      "debt_to_equity": 4.135309814876942
+    },
+    "0.99": {
+      "liabilities_to_assets": 5.365641301677897,
+      "current_ratio": 23.709764567704426,
+      "cash_to_assets": 0.9624608246605868,
+      "debt_to_assets": 1.512378660245213,
+      "equity_to_assets": 0.9722730428257124,
+      "working_capital_to_assets": 0.9382650782439972,
+      "cash_to_current_liabilities": 16.342074912656066,
+      "debt_to_equity": 16.29537894247819
+    },
+    "1.0": {
+      "liabilities_to_assets": 87.64752650176679,
+      "current_ratio": 258.6401493835371,
+      "cash_to_assets": 1.0003360750536063,
+      "debt_to_assets": 909.3225635847878,
+      "equity_to_assets": 200.1637778809169,
+      "working_capital_to_assets": 1.5155123810836104,
+      "cash_to_current_liabilities": 257.69233130403643,
+      "debt_to_equity": 4787.979182729376
+    }
+  },
+  "failures": [],
+  "scope_note": "Structural checks cover schema, point-in-time labels, duplicates, numeric finiteness, maturity cutoff, and event inventory accession/date validation. CompanyFacts accession and exact period-date matching are enforced during panel construction; original filing review is still required for a targeted sample of unusual facts."
+}
