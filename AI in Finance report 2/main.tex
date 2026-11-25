@@ -1,0 +1,81 @@
+\documentclass[11pt,a4paper]{article}
+
+% AI in Finance course project: edit the four fields below, then body.tex.
+\newcommand{\ProjectTitle}{Hybrid Structural and Machine-Learning\\ Corporate Bankruptcy Prediction}
+\newcommand{\ProjectAuthors}{Pushkar Gudla (AI24BTECH11012)\\ Vijaya Sreyas Badde (AI24BTECH11003)\\ Adya Thikkavarapu (ES24BTECH11007)}
+\newcommand{\CourseName}{AI in Finance}
+\newcommand{\CourseTerm}{July--November 2026}
+
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[margin=25mm]{geometry}
+\usepackage{microtype}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{xcolor}
+\usepackage{hyperref}
+
+\definecolor{courseblue}{HTML}{293B87}
+\definecolor{promptgray}{HTML}{4D5665}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=courseblue,
+  urlcolor=courseblue,
+  citecolor=courseblue,
+  pdftitle={AI in Finance course project report template},
+  pdfauthor={Department of Artificial Intelligence, IIT Hyderabad}
+}
+\newcommand{\guide}[1]{\par\smallskip\noindent\textcolor{promptgray}{\textbf{Writing guidance.} #1}\par\smallskip}
+
+\begin{document}
+\pagenumbering{alph} % unique, unprinted title-page link target
+\begin{titlepage}
+\centering
+\includegraphics[width=3.1cm]{assets/iith-logo.png}\par
+\vspace{1.2cm}
+{\Large\color{courseblue}\bfseries \CourseName\par}
+\vspace{0.25cm}
+{\large Course project report \textbar{} \CourseTerm\par}
+\vspace{1.55cm}
+{\huge\bfseries \ProjectTitle\par}
+\vspace{0.9cm}
+{\large \ProjectAuthors\par}
+\vspace{0.45cm}
+{\normalsize Department of Artificial Intelligence\\
+Indian Institute of Technology Hyderabad\par}
+\vspace{0.5cm}
+{\normalsize Submission date: November 2026\par}
+\vfill
+\begin{minipage}{0.88\textwidth}
+\rule{\linewidth}{0.6pt}
+\vspace{0.12cm}
+{\large\bfseries Abstract}\par\medskip
+Lenders and regulators need an early, reliable probability that a firm will fail. We ask whether
+the Merton structural credit model adds value to machine-learning (ML) predictors of US corporate
+bankruptcy. Using only free SEC EDGAR data, we build a point-in-time panel of 252,943 10-K/10-Q filings
+from 10,743 non-financial firms (2010--2025); the target is an 8-K Item~1.03 bankruptcy disclosure within
+12 months. Since free price data omit failed firms, we compute an accounting distance to default (DD)
+and a public-float naive DD from filings. We compare a structural-only logit, ML models (logit, random
+forest, XGBoost, LSTM) and three hybrids on an out-of-time test (2022--2025, 700 positive filings) and
+five shift regimes. Gradient-boosted trees with firm history reach AUROC 0.872 versus 0.800 for the
+structural model. Structural features improve logistic regression (+0.021 AUROC, firm-bootstrap 95\%
+CI [0.013, 0.030]) but not tree models, and give only a modest gain out-of-industry. Qualification:
+the structural inputs use book values rather than market prices, and probability levels calibrated on
+2020 understate risk in 2022--2025.\par
+\vspace{0.12cm}\rule{\linewidth}{0.6pt}
+\end{minipage}
+\end{titlepage}
+
+\pagenumbering{arabic}
+\tableofcontents
+\bigskip
+
+\input{body}
+
+\section*{References}
+\addcontentsline{toc}{section}{References}
+\bibliographystyle{plain}
+{\renewcommand{\section}[2]{}% the References heading above is kept from the template
+\bibliography{references}}
+
+\end{document}
