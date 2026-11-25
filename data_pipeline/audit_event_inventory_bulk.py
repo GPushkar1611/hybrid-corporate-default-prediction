@@ -12,7 +12,7 @@ from pathlib import Path
 
 import pandas as pd
 
-from sec_labels import _hits, build_bankruptcy_table
+from data_pipeline.sec_labels import _hits, build_bankruptcy_table
 
 
 def sha256(path: Path) -> str:

@@ -24,8 +24,8 @@ Everything is built from free, official SEC EDGAR data.
 pip install -r requirements.txt
 
 # 1. data (needs internet + an SEC contact e-mail in the user agent)
-python download_sec_companyfacts.py --user-agent "Your Name your.email@domain"
-python augment_companyfacts_panel.py          # builds the v2 panel used by every model
+python -m data_pipeline.download_sec_companyfacts --user-agent "Your Name your.email@domain"
+python -m data_pipeline.augment_companyfacts_panel          # builds the v2 panel used by every model
 
 # 2. experiments: open and run from the repository root
 jupyter notebook implementation_notebook.ipynb
@@ -48,12 +48,12 @@ The notebook writes all figures and tables to `results/`. Run-time switches are 
 
 **Pipeline** (all sources are SEC bulk files; raw downloads go to `sec_bulk/`, which git ignores):
 
-1. `audit_event_inventory_bulk.py` + `sec_labels.py` → bankruptcy event table (`artifacts/sec_event_validation/`)
-2. `build_companyfacts_panel.py` → **v1 panel**: balance-sheet ratios per filing (FSDS filing metadata + Company Facts values)
-3. `validate_companyfacts_panel.py` → integrity checks on v1 (duplicates, label timing, maturity cutoff)
-4. `augment_companyfacts_panel.py` → **v2 panel** (`artifacts/sec_companyfacts_bankruptcy_v2/`): v1 + income/cash-flow ratios, public float, structural features
+1. `data_pipeline/audit_event_inventory_bulk.py` + `data_pipeline/sec_labels.py` → bankruptcy event table (`artifacts/sec_event_validation/`)
+2. `data_pipeline/build_companyfacts_panel.py` → **v1 panel**: balance-sheet ratios per filing (FSDS filing metadata + Company Facts values)
+3. `data_pipeline/validate_companyfacts_panel.py` → integrity checks on v1 (duplicates, label timing, maturity cutoff)
+4. `data_pipeline/augment_companyfacts_panel.py` → **v2 panel** (`artifacts/sec_companyfacts_bankruptcy_v2/`): v1 + income/cash-flow ratios, public float, structural features
 
-Steps 1–3 are only needed to rebuild the panel from scratch: `download_sec_fsds.py` and `download_sec_submissions.py` fetch their inputs, several GB. Step 4 needs only `companyfacts.zip`.
+Steps 1–3 are only needed to rebuild the panel from scratch: `data_pipeline/download_sec_fsds.py` and `data_pipeline/download_sec_submissions.py` fetch their inputs, several GB. Step 4 needs only `companyfacts.zip`.
 
 ## Structural features without stock prices
 
@@ -118,6 +118,7 @@ Free price sources drop delisted firms, and those are exactly the bankrupt ones.
 
 ```
 implementation_notebook.ipynb   all experiments, figures and tables
+data_pipeline/                  SEC download, label audit, panel build/validation (run with python -m)
 src/pipeline/                   shared experiment code
     data.py         load panel, feature groups and feature sets
     lags.py         history features for XGB-lag
@@ -131,10 +132,10 @@ src/pipeline/                   shared experiment code
     runner.py       train -> calibrate -> test for any model; equal-budget tuning
     plots.py        figure helpers
 src/structural/                 Merton toolbox + SEC-only structural features
-*.py (root)                     SEC download, label audit, panel build/validation scripts
 artifacts/                      built datasets, manifests, validation reports
 market_structural_pipeline/     original Yahoo-price Merton pipeline (reference only)
 results/                        notebook outputs: figures/, tables/, predictions/
+reports/                        mid-term report (PDF) and final report (LaTeX source + PDF)
 tests/test_pipeline.py          unit tests (splits, preprocessing, calibration, metrics, runner)
 ```
 

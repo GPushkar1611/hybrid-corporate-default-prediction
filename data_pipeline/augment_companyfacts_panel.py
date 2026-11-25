@@ -27,7 +27,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from build_companyfacts_panel import FEATURE_COLUMNS as V1_FEATURES
+from data_pipeline.build_companyfacts_panel import FEATURE_COLUMNS as V1_FEATURES
 from src.pipeline.splits import TRAIN_END_YEAR
 
 TRAIN_END = f"{TRAIN_END_YEAR}-12-31"  # sector priors use training rows only

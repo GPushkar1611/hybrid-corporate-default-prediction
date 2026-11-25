@@ -9,7 +9,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from build_companyfacts_panel import FEATURE_COLUMNS
+from data_pipeline.build_companyfacts_panel import FEATURE_COLUMNS
 
 
 FEATURES = list(FEATURE_COLUMNS)

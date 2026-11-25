@@ -20,3 +20,19 @@ panel_build_failures.csv
 *.joblib
 *.pt
 *.pkl
+
+# OS / archive leftovers
+__MACOSX/
+.DS_Store
+Thumbs.db
+
+# LaTeX build files
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.toc
+*.synctex.gz
